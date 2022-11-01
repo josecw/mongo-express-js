@@ -2,18 +2,14 @@ const { app } = require('../index');
 
 const request = require('supertest');
 const expect = require('chai').expect;
-
 const MongoClient = require('mongodb').MongoClient;
-const config = require('dotenv').config()
-const connectionString = process.env.MONGO_URI;
-
 
 
 describe('Operations on profiles', () => {
     let connection;
 
     beforeAll(async () => {
-        connection = await MongoClient.connect(connectionString);
+        connection = await MongoClient.connect(process.env.MONGO_URI);
     });
 
     afterAll(async () => {

@@ -12,7 +12,7 @@ const dbo = require('../db/connection');
 profileRoutes.route('/').get(async function (_req, res) {
     const dbConnect = dbo.getDb();
 
-    dbConnect
+    await dbConnect
         .collection('profiles')
         .find({})
         .toArray(function (err, result) {
@@ -26,12 +26,12 @@ profileRoutes.route('/').get(async function (_req, res) {
 });
 
 // This section will help you create a new record.
-profileRoutes.route('/').post(function (req, res) {
+profileRoutes.route('/').post(async function (req, res) {
     const dbConnect = dbo.getDb();
     const matchDocument = req.body
 
     matchDocument["last_updated_dt"] = new Date();
-    dbConnect
+    await dbConnect
         .collection('profiles')
         .insertOne(matchDocument, function (err, result) {
             if (err) {
@@ -44,14 +44,14 @@ profileRoutes.route('/').post(function (req, res) {
 });
 
 // This section will help you update a record by id.
-profileRoutes.route('/:id').post(function (req, res) {
+profileRoutes.route('/:id').post(async function (req, res) {
     const dbConnect = dbo.getDb();
     const query = { org_id: req.params.id };
     const updates = req.body;
 
     updates["last_updated_dt"] = new Date();
 
-    dbConnect
+    await dbConnect
         .collection('profiles')
         .replaceOne(query, updates, {upsert: true}, function (err, _result) {
             if (err) {
@@ -66,11 +66,11 @@ profileRoutes.route('/:id').post(function (req, res) {
 });
 
 // This section will help you retrieve a record by id.
-profileRoutes.route('/:id').get(function (req, res) {
+profileRoutes.route('/:id').get(async function (req, res) {
     const dbConnect = dbo.getDb();
     const query = { org_id: req.params.id };
 
-    dbConnect
+    await dbConnect
         .collection('profiles')
         .findOne(query, function (err, result) {
             if (err) {
@@ -87,11 +87,11 @@ profileRoutes.route('/:id').get(function (req, res) {
 });
 
 // This section will help you delete a record by id.
-profileRoutes.route('/:id').delete(function (req, res) {
+profileRoutes.route('/:id').delete(async function (req, res) {
     const dbConnect = dbo.getDb();
     const query = { org_id: req.params.id };
 
-    dbConnect
+    await dbConnect
         .collection('profiles')
         .deleteOne(query, function (err, _result) {
             if (err) {
